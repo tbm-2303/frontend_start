@@ -1,44 +1,30 @@
-import React, { useState,useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import facade from "./apiFacade"
-import LogIn from "./components/LoginForm";
-import LoggedIn from "./components/LoggedIn";
+import Content from "./components/Content";
+
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [user, setUser] = useState({ name: "", roles: "" })
+    const [loggedIn, setLoggedIn] = useState(false)
+    const [user, setUser] = useState({username: "", roles: ""});
 
+    const logout = () => {  
+        facade.logout()
+        setLoggedIn(false)
+        setUser({username: "", roles: ""})
+    } 
 
-  const logout = () => {  
-    facade.logout()
-    setLoggedIn(false)
-    setUser({ name: "", roles: "" })
-  } 
+    const login = (user, pass) => { 
+        facade.login(user,pass).then(() => {
+            const token = facade.readJWTTokken(facade.getToken());
+            setUser({username: token.username, roles: token.roles});
+            setLoggedIn(true);
+        })
+    } 
 
-  const login = (user, pass) => { 
-    facade.login(user,pass).then(() => {
-      const token = facade.readJWTTokken(facade.getToken());
-      setUser({ name: token.username, roles: token.roles })
-      setLoggedIn(true);
-    })
-   } 
-
-  return (
-    <div>
-      {!loggedIn ? (<LogIn login={login} />) :
-        (<div>
-          <LoggedIn user={user}/>
-          <button onClick={logout}>Logout</button>
-        </div>)}
-    </div>
-  )
+    return (
+        <div>
+            <Content user={user} loggedIn={loggedIn} logout={logout} login={login} />
+        </div>
+    )
 }
-
-
-
-
-
-
-
-
-
 export default App;

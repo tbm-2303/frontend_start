@@ -3,6 +3,7 @@ const URL = "http://localhost:8080/backend_start";
 
 function handleHttpErrors(res) {
  if (!res.ok) {
+  console.log(res.status)
    return Promise.reject({ status: res.status, fullError: res.json() })
  }
  return res.json();

@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { useParams, useNavigate } from "react-router-dom"
 
-const LogIn = ({ login }) => {
+function LoginForm ({login }) {
     const init = { username: "", password: "" };
     const [loginCredentials, setLoginCredentials] = useState(init);
-
+    const navigate = useNavigate()
+    
     const performLogin = (evt) => {
         evt.preventDefault();
         login(loginCredentials.username, loginCredentials.password);
+        navigate('/');
     }
+
     const onChange = (evt) => {
         setLoginCredentials({ ...loginCredentials,[evt.target.id]: evt.target.value })
     }
-      
-      
+
     return (
-        <div>
-            <h2>Login</h2>
-            <form onChange={onChange} >
-                <input placeholder="User Name" id="username" />
-                <input placeholder="Password" id="password" />
-                <button onClick={performLogin}>Login</button>
-            </form>
-        </div>
-        )
-      }
+        <>  
+            <div className='login'>
+                <form onChange={onChange}>
+                    <input placeholder="Username" id="username"/>
+                    <input placeholder="Password" id="password"/>
+                    <button className="" onClick={performLogin}>Login</button>
+                </form> 
+            </div>
+        </>  
+   
+    )
+}
 
-
-export default LogIn
+export default LoginForm
